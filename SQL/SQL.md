@@ -1,8 +1,8 @@
-#### Difference between *WHERE* clause and *HAVING* clause?
+### Difference between *WHERE* clause and *HAVING* clause?
 
 WHERE filters rows before grouping, while HAVING filters groups after aggregation. WHERE cannot be used with aggregate functions, but HAVING can.
-**WHERE** filters raw data row by row before any grouping happens.
-**HAVING** filters groups created by GROUP BY, usually using aggregate functions.
+- **WHERE** filters raw data row by row before any grouping happens.
+- **HAVING** filters groups created by GROUP BY, usually using aggregate functions.
 | Feature                            | WHERE                                                        | HAVING                              |
 | ---------------------------------- | ------------------------------------------------------------ | ----------------------------------- |
 | **When it is applied**             | Before grouping (on individua rows)                         | After grouping (on aggregated data) |
