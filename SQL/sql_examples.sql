@@ -1,3 +1,20 @@
+-- INSERT a single row
+INSERT INTO employees (name, department, salary)
+VALUES ('Farzana', 'IT', 60000);
+
+-- INSERT multiple rows
+INSERT INTO employees (name, salary)
+VALUES 
+('Anu', 40000),
+('Rahim', 45000);
+
+-- INSERT data from another table (INSERT SELECT)
+INSERT INTO backup_employees (id, name, department)
+SELECT id, name, department
+FROM employees
+WHERE department = 'IT';
+
+
 -- Using WHERE - filter rows before grouping
 SELECT *
 FROM Employees
@@ -40,6 +57,7 @@ FROM Employees
 GROUP BY Department
 HAVING COUNT(*) > 5;
 
+-- Example 2: total sales per product where total sales > 250
 SELECT product, SUM(amount) AS total_sales
 FROM sales
 GROUP BY product
@@ -120,4 +138,71 @@ FROM users;
 -- If email is NULL, use phone; if both are NULL, use 'No contact info'.
 SELECT COALESCE(email, phone, 'No contact info') AS contact
 FROM customers;
+
+-- UNION
+-- example: combine employee and manager names into a single list and Removes duplicates
+SELECT name FROM employees
+UNION
+SELECT name FROM managers;
+
+-- UNION ALL
+-- example: combine employee and manager names into a single list and Keeps duplicates
+SELECT name FROM employees
+UNION ALL
+SELECT name FROM managers;
+
+-- MINUS
+-- Shows users who are not active.
+SELECT id FROM all_users
+MINUS
+SELECT id FROM active_users;
+
+-- In MySQL (since MINUS doesn’t exist):
+SELECT id FROM all_users
+WHERE id NOT IN (SELECT id FROM active_users);
+-- OR using LEFT JOIN
+SELECT id FROM all_users
+LEFT JOIN active_users USING(id)
+WHERE active_users.id IS NULL;
+
+-- INTERSECT
+-- Example 1: Find common values
+SELECT name FROM employees
+INTERSECT
+SELECT name FROM managers;
+
+-- Example 2: INTERSECT with multiple columns
+-- Gives employees who are also in the project team with same id and department
+SELECT id, department FROM employees
+INTERSECT
+SELECT id, department FROM project_team;
+
+-- MySQL does not support INTERSECT. You can simulate it with:
+-- Using INNER JOIN:
+SELECT e.name
+FROM employees e
+JOIN managers m ON e.name = m.name;
+-- Or using EXISTS:
+SELECT name FROM employees e
+WHERE EXISTS (
+    SELECT 1 FROM managers m WHERE m.name = e.name
+);
+
+-- ALIAS
+-- 1. Column Alias
+-- Output column names will be employee_name and monthly_salary.
+SELECT name AS employee_name, salary AS monthly_salary
+FROM employees;
+-- Or without AS (still valid):
+SELECT name employee_name, salary monthly_salary
+FROM employees;
+
+-- 2. Table Alias
+-- e = alias for employees
+-- d = alias for departments
+-- Now you can refer to the tables as e and d inside the query.
+SELECT e.name, d.department_name
+FROM employees e
+JOIN departments d
+ON e.dept_id = d.id;
 

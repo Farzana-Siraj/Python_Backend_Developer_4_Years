@@ -1,3 +1,7 @@
+### INSERT
+
+*INSERT* is used to add new rows into a table (manually or using SELECT).
+
 ### Aggregate functions
 
 - COUNT()
@@ -20,8 +24,8 @@ To get summary results like:
 
 ### HAVING
 
-**HAVING** is used to filter groups created by GROUP BY after aggregation.
-It works like WHERE, but *WHERE cannot be used with aggregate functions*, whereas HAVING can.
+**HAVING** is used to filter groups created by *GROUP BY* after aggregation.
+It works like *WHERE*, but *WHERE cannot be used with aggregate functions*, whereas HAVING can.
 
 #### Why do we use HAVING?
 
@@ -32,7 +36,7 @@ It works like WHERE, but *WHERE cannot be used with aggregate functions*, wherea
 
 WHERE filters rows before grouping, while HAVING filters groups after aggregation. WHERE cannot be used with aggregate functions, but HAVING can.
 - **WHERE** filters raw data row by row before any grouping happens.
-- **HAVING** filters groups created by GROUP BY, usually using aggregate functions.
+- **HAVING** filters groups created by *GROUP BY*, usually using aggregate functions.
 
 | Feature                            | WHERE                                                        | HAVING                              |
 | ---------------------------------- | ------------------------------------------------------------ | ----------------------------------- |
@@ -65,3 +69,70 @@ It checks values from left to right, and the moment it finds a non-NULL value, i
 - To handle optional fields
 - To avoid NULL results in calculations
 - To prevent NULL values from breaking string concatenation
+
+
+### UNION
+
+**UNION** is used to combine results from two SELECT queries and remove duplicate rows.
+**Syntax:**
+SELECT column1, column2 FROM table1
+UNION
+SELECT column1, column2 FROM table2;
+
+**Rules:**
+
+- Both queries must return same number of columns
+- Data types must be compatible
+
+#### UNION ALL
+
+- UNION ALL keeps duplicates (faster)
+
+### MINUS (also called EXCEPT in some SQL systems)
+
+**MINUS** returns rows that exist in the first query but NOT in the second.
+
+**Syntax (Oracle, PostgreSQL uses EXCEPT):**
+
+SELECT column FROM table1
+MINUS
+SELECT column FROM table2;
+
+
+### INTERSECT
+
+**INTERSECT** returns only the rows that are common in the results of two SELECT queries. it returns the rows that appear in both SELECT queries, removing duplicates. It is used to find common records between datasets.
+
+**In other words:**
+INTERSECT = common rows between two result sets (like logical AND)
+
+**Requirements:**
+- Both queries must return the same number of columns
+- Data types must be compatible
+- Removes duplicate rows
+
+**Syntax**
+SELECT column1, column2 FROM table1
+INTERSECT
+SELECT column1, column2 FROM table2;
+
+
+### ALIAS
+
+An alias is a temporary name given to a table or column to make SQL queries shorter and easier to read.
+Aliases exist only during the query execution — they do NOT change actual table/column names in the database.
+
+#### 1. Column Alias
+
+Used to rename a column in the output.
+
+#### 2. Table Alias
+
+Used to give a short name to a table — very helpful in JOINs.
+
+#### Why use aliases?
+
+- Make queries shorter
+- Make JOINs cleaner
+- Avoid confusion when column names are same in multiple tables
+- Needed in self joins
