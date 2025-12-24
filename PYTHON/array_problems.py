@@ -1,0 +1,15 @@
+"""
+classic prefix-sum + parity shift problem 
+(often called “Ways to Make a Fair Array”).
+Given an array arr[], count the number of indices such that deleting the 
+element at that index and shifting all elements after it one position left 
+results in an array where the sum of elements at even indices equals the 
+sum at odd indices.
+Examples:
+Input: arr[] = [2, 1, 6, 4]
+Output: 1
+Explaination: 
+After removing arr[1], the resulting array will be [2, 6, 4] the sums of 
+elements at odd index is arr[1] = 6 and the sum of elements at even index
+is arr[0] + arr[2] = 6.
+"""

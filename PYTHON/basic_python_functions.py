@@ -35,3 +35,20 @@ def printInDecreasing(x):
 def stringJumper(s):
     for i in range(0,len(s),2):
         print(s[i], end="")
+
+
+# strip()- Remove leading and trailing spaces
+def trim(str):
+    return str.strip()
+
+# Return starting index , Use: find()
+def exists(str, x):
+    return str.find(x)
+
+# Convert string to title case : Use: title()
+def titleIt(str):
+    return str.title()
+
+# Swap uppercase ↔ lowercase
+def casesSwap(str):
+    return str.swapcase()
