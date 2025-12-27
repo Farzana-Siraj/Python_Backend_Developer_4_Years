@@ -31,3 +31,7 @@ b. string[0:] = python (Slicing till last index)
 c. string[0:4] = pyth (Slicing till index 3)
 d. string[0:-2] = pyth (Slicing till index -3).
 Note: -1 indexing starts from last of any string.
+
+#### defaultdict
+
+It is a special type of dictionary. It automatically assigns a default value if a key does not exist
