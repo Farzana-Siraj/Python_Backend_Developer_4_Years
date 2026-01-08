@@ -36,4 +36,7 @@ def second_largest_number_sort(arr):
     return unique_numbers[-2]
 #-------------------------------------------
 
-# second largest without duplicates
+nums = [2, 6, 3, 8, 5]
+s = sorted(nums)
+print(s[-2])
+# -------------------------------------------

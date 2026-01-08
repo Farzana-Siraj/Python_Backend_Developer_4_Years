@@ -15,3 +15,6 @@ def f():
 - (x for x in range(10)) is a generator expression
 - ❌ list(x for x in range(10)) - wrapping it with list() consumes the generator Final result is a list, not a generator
 - ❌ lambda: yield 42. (yield cannot be used inside lambda)
+---
+
+## Decorator
