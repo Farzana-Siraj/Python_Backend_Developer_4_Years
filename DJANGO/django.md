@@ -274,3 +274,77 @@ Middleware can catch exceptions:
 def process_exception(self, request, exception):
     return HttpResponse("Something went wrong")
 ```
+
+### Hooks
+**Hooks** are predefined execution points in Django’s request–response lifecycle where middleware code is automatically invoked.
+**Hooks** are like checkpoints on a highway where Django allows middleware to inspect, modify, or stop traffic.
+A hook is simply a predefined place where Django lets you plug in your own code so it runs automatically at a specific point in the request–response cycle.
+- Hooks = predefined interception points
+
+#### Hooks in Django Middleware (Lifecycle Points)
+
+Django calls middleware code at specific hooks during request handling.
+
+**1️⃣ Request Hook (Before View)**
+```bash
+def __call__(self, request):
+```
+Runs before the view.
+Can: Modify request, Block request, Return response directly
+
+**2️⃣ View Hook (Before View Is Called)**
+```bash
+def process_view(self, request, view_func, view_args, view_kwargs):
+```
+Runs just before view execution
+Used for: Permission checks, Conditional logic based on view
+
+**3️⃣ Exception Hook**
+```bash
+def process_exception(self, request, exception):
+```
+Runs if the view raises an exception. Can return custom error response
+
+**4️⃣ Response Hook (After View)**
+```bash
+response = self.get_response(request)
+```
+Runs after view returns response
+Can: Modify headers, Log response, Compress data
+
+Flow:-
+```bash
+Request
+  ↓
+process_request / __call__
+  ↓
+process_view
+  ↓
+View
+  ↓ (exception?)
+process_exception
+  ↓
+process_response / __call__
+  ↓
+Response
+```
+#### Why Hooks Are Important
+Hooks allow you to:
+- Add authentication globally
+- Enforce security rules
+- Log requests
+- Modify responses
+- Handle errors centrally
+
+Without hooks: Logic would be duplicated in every view
+
+**⚠️ Modern Django Note (Very Important)**
+
+*Old-style middleware had:*
+- process_request
+- process_response
+
+*New-style middleware (current Django) uses:*
+- __init__
+- __call__
+- optional process_view, process_exception
