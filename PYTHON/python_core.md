@@ -45,8 +45,8 @@ s = s + " world"
 ```
 - Creates a new string, old one stays unchanged
 - Helps with memory optimization & thread safety
-    - How Immutability Helps with Memory Optimization
-        1. Object Reuse (String Interning)
+    - **How Immutability Helps with Memory Optimization**
+        1. Object Reuse (**String Interning**)
             - Because immutable objects never change, Python can safely reuse the same object.
             ```bash
             a = "python"
@@ -57,7 +57,7 @@ s = s + " world"
             - Python stores only one "python" object in memory, Both variables point to the same object
             - Huge memory savings when many identical strings exist (logs, JSON keys, configs)
             - ❌ If strings were mutable → changing one would affect all references → unsafe
-        2. Safe Hashing (Used in dict / set)
+        2. **Safe Hashing**(Used in dict / set)
             - Immutable objects can be hashed once and reused
             ```bash
             d = {"name": "Farzana"}
@@ -92,7 +92,8 @@ s = s + " world"
 | Caching        | Safe reuse        |
 
 Immutability allows Python to reuse objects safely, cache their hash values, and avoid synchronization issues in multi-threaded environments, resulting in better memory efficiency and thread safety.
----| Expression | Type  | Reason              |
+---
+| Expression | Type  | Reason              |
 | ---------- | ----- | ------------------- |
 | `()`       | tuple | Empty tuple         |
 | `(1)`      | int   | Just grouping (Parentheses are treated as grouping, not tuple creation)|
@@ -191,7 +192,7 @@ memory
 - This is possible only because strings are immutable.
 
 - Python interns some immutable strings for memory optimization. Identifier-like strings may share the same object, while others don’t, so is may return True or False depending on interning.
--is checks object identity, and string interning is an optimization, not a language guarantee.
+- is checks object identity, and string interning is an optimization, not a language guarantee.
 
 ##### can do force interning
 ```bash
@@ -209,7 +210,7 @@ Because:
 Interning is an implementation detail
 Behavior may change
 Code becomes unreliable
----
+...
 #### Mutable Objects
 ```bash
 a = []
@@ -367,8 +368,8 @@ if user is None:
 ---
 - (a >= 0) **!=** (b >= 0) is True only when one is positive and the other is negative. (**!= is XOR operation**)
 - By default, print() adds a newline (\n). To print without a newline, use the **end** parameter.
--- *print(i, end=" ")* - it gives a single space
--- *print(i, end="")* - it doesn't gives a space. printing character and separating characters by nothing.
+    - *print(i, end=" ")* - it gives a single space
+    - *print(i, end="")* - it doesn't gives a space. printing character and separating characters by nothing.
 
 #### Key Characteristics of range()
 
@@ -393,12 +394,167 @@ if user is None:
 #### slicing
 
 string = "python"
-a. string[0:2] = py (Slicing till index 1)
-b. string[0:] = python (Slicing till last index)
-c. string[0:4] = pyth (Slicing till index 3)
-d. string[0:-2] = pyth (Slicing till index -3).
+1. string[0:2] = py (Slicing till index 1)
+2. string[0:] = python (Slicing till last index)
+3. string[0:4] = pyth (Slicing till index 3)
+4. string[0:-2] = pyth (Slicing till index -3).
 Note: -1 indexing starts from last of any string.
 
 #### defaultdict
 
 It is a special type of dictionary. It automatically assigns a default value if a key does not exist
+
+### shallow vs deep copy
+Shallow copy duplicates only the top-level object and shares nested references, while deep copy duplicates all nested objects, creating a completely independent copy.
+
+#### copying
+Copying means creating a new object from an existing one.
+#### Shallow Copy
+- Creates a new outer object
+- Inner (nested) objects are shared
+- Changes to nested objects affect both copies
+- use when No nested mutable objects, Performance matters
+
+#### Deep Copy
+- Creates a new object at all levels
+- No shared references
+- Fully independent copy
+- use when Nested mutable objects exist, You need complete isolation
+```bash
+a = [1, 2, [3, 4]]
+
+# shallow copy
+import copy
+
+b = copy.copy(a)
+# OR
+b = a.copy()
+# OR
+b = a[:]
+
+b[0] = 100
+b[2].append(5)
+
+print(a)  # [1, 2, [3, 4, 5]]
+print(b)  # [100, 2, [3, 4, 5]]
+# ----------------------------------
+
+# deepcopy
+import copy
+
+b = copy.deepcopy(a)
+b[2].append(5)
+
+print(a)  # [1, 2, [3, 4]]
+print(b)  # [1, 2, [3, 4, 5]]
+
+```
+| Feature           | Shallow Copy | Deep Copy |
+| ----------------- | ------------ | --------- |
+| Outer object      | New          | New       |
+| Inner objects     | Shared       | New       |
+| Affects original? | Yes (nested) | No        |
+| Memory usage      | Less         | More      |
+| Speed             | Faster       | Slower    |
+```bash
+#  it is assignment, not a copy, No copy created, Both variables point to same object
+b = a
+
+# Tuple itself is immutable, Inner list still shared
+t = (1, [2, 3])
+copy.copy(t)
+
+# dict shallow copy
+a = {"x": [1, 2]}
+b = a.copy()
+
+b["x"].append(3)
+print(a)  # {'x': [1, 2, 3]}
+
+# Real Backend Example
+def process(data):
+    local = data.copy()   # shallow
+    local["status"] = "processed"
+# Use deep copy if data contains nested lists/dicts that must not change.
+
+```
+
+### remove, Pop, Del
+| Feature             | remove()   | pop()      | del           |
+| ------------------- | ---------- | ---------- | ------------- |
+| Deletes by          | Value      | Index      | Index / Slice |
+| Returns value       | ❌ No       | ✅ Yes      | ❌ No          |
+| Deletes multiple    | ❌ No       | ❌ No       | ✅ Yes         |
+| Can delete variable | ❌          | ❌          | ✅             |
+| Error type          | ValueError | IndexError | IndexError    |
+
+**When to Use What?**
+✅ Use **remove()** when:
+
+You know the value
+You don’t need the removed item
+- remove() deletes by value
+- Removes first occurrence of a value
+- Searches by value, not index
+- Removes only first match
+```bash
+list.remove(value)
+
+nums = [10, 20, 30, 20]
+nums.remove(20)
+print(nums)
+# [10, 30, 20]
+
+# ❌ Error if value not found
+ValueError: list.remove(x): x not in list
+
+```
+
+✅ Use **pop()** when:
+
+You know the index
+You need the removed value
+- pop() deletes by index and returns the element
+- Removes and returns an element
+- Uses index (default: last element)
+- Returns removed value
+- ❌ Error if index out of range
+```bash
+list.pop(index)
+
+nums = [10, 20, 30]
+x = nums.pop()
+print(x)     # 30
+print(nums)  # [10, 20]
+
+nums.pop(0)
+# removes 10
+
+IndexError: pop index out of range
+```
+
+✅ Use **del** when:
+
+You want to remove multiple items
+You want to delete the object itself
+- del deletes by index, slice, or deletes the object itself(variable)
+- Does not return anything
+- Keyword, not a method
+- can delete:- single item, multiple items(slice), entire object.
+```bash
+# syntax
+del list[index]
+del list[start:end]
+del variable
+
+nums = [10, 20, 30, 40]
+del nums[1]
+# [10, 30, 40]
+
+del nums[1:3]
+# [10]
+
+del nums
+# deletes variable completely
+
+```

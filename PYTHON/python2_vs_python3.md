@@ -12,3 +12,6 @@
 | Libraries Support | Deprecated | Fully supported |
 | Performance | Slower | Faster & optimized |
 | Learning Recommendation | ❌ Not recommended | ✅ Recommended |
+---
+- Dictionary - Ordered (Python 3.7+)
+
